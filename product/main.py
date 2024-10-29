@@ -2,7 +2,7 @@ from fastapi import FastAPI,status,Response,HTTPException
 from . import schemas
 from . import models
 from . database import engine,SessionLocal,get_db
-from . routers import product,seller
+from . routers import product,seller,auth
 
 
 app = FastAPI(title="Products Api",description="get info for products",terms_of_service="",
@@ -18,6 +18,7 @@ app = FastAPI(title="Products Api",description="get info for products",terms_of_
       )
 app.include_router(product.router)
 app.include_router(seller.router)
+app.include_router(auth.router)
 models.Base.metadata.create_all(engine)
 
 

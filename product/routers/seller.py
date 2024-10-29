@@ -8,7 +8,7 @@ from sqlalchemy.sql.functions import mode
 from typing import List
 from passlib.context import CryptContext
 
-router = APIRouter()
+router = APIRouter(tags=["Sellers"])
 
 pwd_context = CryptContext(
       schemes=["bcrypt"],
@@ -16,7 +16,7 @@ pwd_context = CryptContext(
     )
 
 
-@router.post('/seller', response_model=schemas.DisplaySeller,tags=["Sellers"])
+@router.post('/seller', response_model=schemas.DisplaySeller)
 def create_seller(request:schemas.Seller,db: Session = Depends(get_db)):
     hashpassword = pwd_context.hash(request.password)
     new_seller = models.Seller(username=request.username, email=request.email,password=hashpassword)
@@ -25,7 +25,7 @@ def create_seller(request:schemas.Seller,db: Session = Depends(get_db)):
     db.refresh(new_seller)
     return new_seller
 
-@router.get('/sellers', response_model=List[schemas.DisplaySeller],tags=["Sellers"])
+@router.get('/sellers', response_model=List[schemas.DisplaySeller])
 def sellers(db: Session = Depends(get_db)):
     sellers = db.query(models.Seller).all()
     return sellers
